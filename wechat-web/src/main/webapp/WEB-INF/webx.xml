@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:p="http://www.springframework.org/schema/p"
+             xmlns:services="http://www.alibaba.com/schema/services"
+             xmlns:ml-adapters="http://www.alibaba.com/schema/services/module-loader/adapters"
+             xmlns:ml-factories="http://www.alibaba.com/schema/services/module-loader/factories"
+             xmlns:pull-factories="http://www.alibaba.com/schema/services/pull/factories"
+             xmlns:request-contexts="http://www.alibaba.com/schema/services/request-contexts"
+             xmlns:basic-interceptors="http://www.alibaba.com/schema/services/request-contexts/basic/interceptors"
+             xmlns:parser-filters="http://www.alibaba.com/schema/services/request-contexts/parser/filters"
+             xmlns:session-encoders="http://www.alibaba.com/schema/services/request-contexts/session/encoders"
+             xmlns:session-idgens="http://www.alibaba.com/schema/services/request-contexts/session/idgens"
+             xmlns:session-interceptors="http://www.alibaba.com/schema/services/request-contexts/session/interceptors"
+             xmlns:model-encoders="http://www.alibaba.com/schema/services/request-contexts/session/model-encoders"
+             xmlns:session-stores="http://www.alibaba.com/schema/services/request-contexts/session/stores"
+             xsi:schemaLocation="
+                 http://www.alibaba.com/schema/services http://localhost:8080/schema/services.xsd
+                 http://www.alibaba.com/schema/services/module-loader/adapters http://localhost:8080/schema/services-module-loader-adapters.xsd
+                 http://www.alibaba.com/schema/services/module-loader/factories http://localhost:8080/schema/services-module-loader-factories.xsd
+                 http://www.alibaba.com/schema/services/pull/factories http://localhost:8080/schema/services-pull-factories.xsd
+                 http://www.alibaba.com/schema/services/request-contexts http://localhost:8080/schema/services-request-contexts.xsd
+                 http://www.alibaba.com/schema/services/request-contexts/basic/interceptors http://localhost:8080/schema/services-request-contexts-basic-interceptors.xsd
+                 http://www.alibaba.com/schema/services/request-contexts/parser/filters http://localhost:8080/schema/services-request-contexts-parser-filters.xsd
+                 http://www.alibaba.com/schema/services/request-contexts/session/encoders http://localhost:8080/schema/services-request-contexts-session-encoders.xsd
+                 http://www.alibaba.com/schema/services/request-contexts/session/idgens http://localhost:8080/schema/services-request-contexts-session-idgens.xsd
+                 http://www.alibaba.com/schema/services/request-contexts/session/interceptors http://localhost:8080/schema/services-request-contexts-session-interceptors.xsd
+                 http://www.alibaba.com/schema/services/request-contexts/session/model-encoders http://localhost:8080/schema/services-request-contexts-session-model-encoders.xsd
+                 http://www.alibaba.com/schema/services/request-contexts/session/stores http://localhost:8080/schema/services-request-contexts-session-stores.xsd
+                 http://www.springframework.org/schema/beans http://localhost:8080/schema/www.springframework.org/schema/beans/spring-beans.xsd
+             ">
+
+    <!-- 支持${xxx}替换。 -->
+    <services:property-placeholder>
+        <property key="component">common</property>
+    </services:property-placeholder>
+
+    <!-- 共享配置。 -->
+    <beans:import resource="common/webx-component-and-root.xml" />
+
+    <!-- 异常管道。 -->
+    <beans:import resource="common/pipeline-exception.xml" />
+
+    <!-- 资源装载。 -->
+    <beans:import resource="common/resources.xml" />
+
+    <!-- URI生成。 -->
+    <beans:import resource="common/uris.xml" />
+
+    <!-- beans配置。 -->
+    <beans:import resource="classpath:spring-beans.xml" />
+    <beans:import resource="classpath:wechat/core/dao.xml" />
+    <!--<beans:import resource="classpath:manager.xml" />-->
+
+    <!-- 综合设置。 -->
+    <services:webx-configuration>
+        <!-- 默认将productionMode设为true，建议在jetty插件中设置-DproductionMode=false。 -->
+        <!--<productionMode>${productionMode:true}</productionMode>-->
+        <productionMode>true</productionMode>
+        <!-- 设置默认应用 -->
+        <components defaultComponent="browse" />
+    </services:webx-configuration>
+
+    <!-- 设置request/response/session。 -->
+    <services:request-contexts>
+        <request-contexts:basic />
+        <request-contexts:buffered />
+        <request-contexts:lazy-commit />
+        <request-contexts:parser>
+            <filters>
+                <parser-filters:uploaded-file-whitelist extensions="jpg, gif, png" />
+            </filters>
+        </request-contexts:parser>
+        <request-contexts:set-locale defaultLocale="zh_CN" defaultCharset="UTF-8" />
+        <request-contexts:session forceExpirationPeriod="14400">
+            <!-- cookie store设置 临时cookie，浏览器关闭则清除，默认设置 -->
+            <stores>
+                <session-stores:cookie-store id="temporaryCookie">
+                    <cookie name="tmp" />
+                </session-stores:cookie-store>
+            </stores>
+            <store-mappings>
+                <match name="*" store="temporaryCookie" />
+            </store-mappings>
+            <interceptors>
+                <session-interceptors:lifecycle-logger />
+                <!-- 拦截器只允许白名单的attribute名称和类型被写入或读出到session store -->
+                <session-interceptors:attribute-whitelist>
+                    <attribute name="_csrf_token" />
+                    <attribute name="_lang" />
+                    <!--<attribute name="user" type="com.yanmo.message.web.common.User" />-->
+                </session-interceptors:attribute-whitelist>
+            </interceptors>
+        </request-contexts:session>
+    </services:request-contexts>
+
+    <!-- 支持上传文件。 -->
+    <services:upload sizeMax="5M" />
+
+    <!-- 将beans暴露给模板。这里定义的tools可被所有components之间共享。 -->
+    <services:pull>
+        <pull-factories:utils />
+        <pull-factories:page-tool />
+        <pull-factories:control-tool />
+        <pull-factories:uris-tool />
+        <!-- 使用beanTool，其他还有constantTool等 -->
+        <pull-factories:bean-tool id="myTool" class="com.yanmo.message.web.common.utils.MyTool" scope="global" />
+    </services:pull>
+
+    <!-- 装载模块。 -->
+    <services:module-loader>
+        <ml-factories:class-modules>
+            <search-packages type="$1" packages="com.yanmo.message.web.common.*" />
+        </ml-factories:class-modules>
+    </services:module-loader>
+
+</beans:beans>
