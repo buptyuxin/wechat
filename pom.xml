@@ -16,12 +16,9 @@
     <name>wechat</name>
 
     <properties>
-        <java.version>1.6</java.version>
-        <message.client>1.0-SNAPSHOT</message.client>
-        <message.core>1.0-SNAPSHOT</message.core>
-        <message.web>1.0-SNAPSHOT</message.web>
-        <message.service>1.0-SNAPSHOT</message.service>
-        <message.test>1.0-SNAPSHOT</message.test>
+        <java.version>1.7</java.version>
+        <wechat.core>1.0-SNAPSHOT</wechat.core>
+        <wechat.web>1.0-SNAPSHOT</wechat.web>
         <webx3.version>3.2.4</webx3.version>
         <spring.version>3.2.7.RELEASE</spring.version>
         <slf4j.version>1.7.6</slf4j.version>
@@ -36,28 +33,13 @@
             <!-- ======================================== -->
             <dependency>
                 <groupId>com.yanmo</groupId>
-                <artifactId>message-client</artifactId>
-                <version>${message.client}</version>
+                <artifactId>wechat-core</artifactId>
+                <version>${wechat.core}</version>
             </dependency>
             <dependency>
                 <groupId>com.yanmo</groupId>
-                <artifactId>message-core</artifactId>
-                <version>${message.core}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.yanmo</groupId>
-                <artifactId>message-service</artifactId>
-                <version>${message.service}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.yanmo</groupId>
-                <artifactId>message-test</artifactId>
-                <version>${message.test}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.yanmo</groupId>
-                <artifactId>message-web</artifactId>
-                <version>${message.web}</version>
+                <artifactId>wechat-web</artifactId>
+                <version>${wechat.web}</version>
             </dependency>
 
             <dependency>
@@ -237,6 +219,7 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <encoding>utf-8</encoding>
                 </configuration>
             </plugin>
             <plugin>

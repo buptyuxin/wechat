@@ -11,5 +11,39 @@
 
     <artifactId>wechat-web</artifactId>
 
+    <packaging>war</packaging>
+    <name>wechat-web v${wechat.web}</name>
+    <artifactId>wechat-web</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.yanmo</groupId>
+            <artifactId>wechat-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.citrus</groupId>
+            <artifactId>citrus-webx-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>wechat</finalName>
+    </build>
 
 </project>
