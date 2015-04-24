@@ -1,0 +1,12 @@
+##action为提交的页面地址，为空表示提交到当前页面
+
+#set ($group = $form.login.defaultInstance)
+
+<form name="loginForm" action="" method="post" enctype="text/plain">
+    #!csrfToken.hiddenField
+    <input type="hidden" name="action" value="login_action" />
+    <input type="hidden" name="event_submit_do_login" />
+    用户名<input type="text" name="UserNick" />
+    密码  <input type="password" name="UserPwd" />
+    登录  <input type="submit" name="submit" />
+</form>

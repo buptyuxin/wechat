@@ -1,0 +1,9 @@
+<html>
+<title>鱼子酱微信后台</title>
+<header>
+    <h1>欢迎来到微信后台！</h1>
+</header>
+<body>
+    $screen_placeholder
+</body>
+</html>

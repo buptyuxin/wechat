@@ -9,4 +9,6 @@
        "
        default-autowire="byName">
 
+    <import resource="classpath:core-service.xml" />
+
 </beans>

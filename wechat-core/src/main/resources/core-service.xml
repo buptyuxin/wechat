@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+       default-autowire="byName">
+
+    <bean id="msgProcessService" class="com.yanmo.wechat.biz.service.impl.MsgProcessServiceImpl">
+        <property name="msgProcessors">
+            <list>
+                <ref local="userMsgProcessor" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="userMsgProcessor" class="com.yanmo.wechat.biz.msg.processor.message.UserMsgProcessor">
+        <property name="messages">
+            <list>
+                <value><![CDATA[室友A：“昨晚你喝醉了，没什么事吧。”
+室友B：“没事，就是菊花好疼啊。”
+室友A：“你看看你枕头下面，是不是有200块钱，呵呵，昨晚是在没忍住。”
+室友B：“你还是不是人，这样对我才给我200块钱。”
+室友A：“不是我给的，是我们几个一起凑的。”]]></value>
+                <value><![CDATA[坐公交，一妹子上车(我认识)，我拍拍大腿，对她说：我这有软座!
+谁知妹子说：算了，一会软座变硬座，硬座又变插座，到时候走都走不了!]]></value>
+                <value><![CDATA[有朋友问：“我的iPhone为什么删软件时所有图标都在抖呢?”
+我严肃的跟他说：“因为它们害怕你把它们删了。”
+他认真想了想又问：“自带的程序删不了，为什么它们也抖呢?”
+我不得不更认真的回答他 ：“亲，那不是在抖，那是在得瑟…”]]></value>
+                <value><![CDATA[女朋友出差刚回来，问我：“狗狗呢？”
+突然想逗她一下就说：“送人了。”
+看到她快急哭了的表情，我哈哈一笑，端起早上灶上的锅说道：“哈哈！骗你的！在锅里呢！”]]></value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

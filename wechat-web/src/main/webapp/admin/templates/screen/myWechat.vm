@@ -1,0 +1,6 @@
+#if($!userNick)
+    <h2>$!userNick 欢迎您！</h2>
+    您的密码为 $!userPwd 。
+#else
+    怎么不按规矩出牌！？
+#end

@@ -58,7 +58,7 @@
         <!--<productionMode>${productionMode:true}</productionMode>-->
         <productionMode>true</productionMode>
         <!-- 设置默认应用 -->
-        <components defaultComponent="browse" />
+        <components defaultComponent="admin" />
     </services:webx-configuration>
 
     <!-- 设置request/response/session。 -->
@@ -104,13 +104,14 @@
         <pull-factories:control-tool />
         <pull-factories:uris-tool />
         <!-- 使用beanTool，其他还有constantTool等 -->
-        <pull-factories:bean-tool id="myTool" class="com.yanmo.message.web.common.utils.MyTool" scope="global" />
+        <!--搞个toJson的工具？？？-->
+        <pull-factories:bean-tool id="myTool" class="com.yanmo.wechat.web.common.utils.MyTool" scope="global" />
     </services:pull>
 
     <!-- 装载模块。 -->
     <services:module-loader>
         <ml-factories:class-modules>
-            <search-packages type="$1" packages="com.yanmo.message.web.common.*" />
+            <search-packages type="$1" packages="com.yanmo.wechat.web.common.module.*" />
         </ml-factories:class-modules>
     </services:module-loader>
 

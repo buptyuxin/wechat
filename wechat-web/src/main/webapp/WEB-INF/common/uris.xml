@@ -13,84 +13,84 @@
              ">
 
     <services:uris>
-        <!-- ================================================================ -->
-        <!-- Server Level： 外部server。                                      -->
-        <!--                                                                  -->
-        <!-- 使用方法： link.getURI('path')                                   -->
-        <!-- ================================================================ -->
-        <uris:uri id="alibabaSite" exposed="true">
-            <serverURI>http://china.alibaba.com/</serverURI>
-        </uris:uri>
-        <uris:uri id="toolkitSite" exposed="true">
-            <serverURI>http://toolkit.alibaba-inc.com/</serverURI>
-        </uris:uri>
-        <!-- ================================================================ -->
-        <!-- Server Level： java server。                                     -->
-        <!--                                                                  -->
-        <!-- 使用方法： 不能直接使用，只被其它URI继承。                       -->
-        <!-- ================================================================ -->
-        <uris:servlet-uri id="petstoreServer" requestAware="true">
-            <servletPath>/</servletPath>
-        </uris:servlet-uri>
-        <!-- ================================================================ -->
-        <!-- Component Level： webx modules。                                 -->
-        <!--                                                                  -->
-        <!-- 使用方法： link.setTarget('target.jhtml')                        -->
-        <!--                  .addQueryData('name', 'value')                  -->
-        <!-- ================================================================ -->
-        <!-- home -->
-        <uris:turbine-uri id="homeModule" exposed="true" extends="petstoreServer">
-            <componentPath>/</componentPath>
-        </uris:turbine-uri>
-        <uris:turbine-content-uri id="homeContent" exposed="true" extends="homeModule">
-            <componentPath>/home</componentPath>
-        </uris:turbine-content-uri>
-        <!-- user -->
-        <uris:turbine-uri id="userModule" exposed="true" extends="petstoreServer">
-            <componentPath>/user</componentPath>
-        </uris:turbine-uri>
-        <uris:turbine-content-uri id="userContent" exposed="true" extends="userModule" />
-        <!-- store -->
-        <uris:turbine-uri id="storeModule" exposed="true" extends="petstoreServer">
-            <componentPath>/store</componentPath>
-        </uris:turbine-uri>
-        <uris:turbine-content-uri id="storeContent" exposed="true" extends="storeModule" />
-        <uris:servlet-content-uri id="storeImageContent" exposed="true" extends="petstoreServer">
-            <prefixPath>/petstore/images</prefixPath>
-        </uris:servlet-content-uri>
-        <!-- ================================================================ -->
-        <!-- Link Level： 继承前述各类links。                                 -->
-        <!--                                                                  -->
-        <!-- 使用方法： link                                                  -->
-        <!-- ================================================================ -->
-        <uris:turbine-uri id="petstoreHomeLink" exposed="true" extends="homeModule">
-            <target>homepage</target>
-        </uris:turbine-uri>
-        <uris:turbine-uri id="petstoreLoginLink" exposed="true" extends="userModule">
-            <target>login</target>
-        </uris:turbine-uri>
-        <uris:turbine-uri id="petstoreLogoutLink" exposed="true" extends="userModule">
-            <target>login</target>
-            <query key="action">loginAction</query>
-            <query key="eventSubmitDoLogout">yes</query>
-        </uris:turbine-uri>
-        <uris:turbine-uri id="petstoreRegisterLink" exposed="true" extends="userModule">
-            <target>register</target>
-        </uris:turbine-uri>
-        <uris:turbine-uri id="petstoreRegisterAccountLink" exposed="true" extends="userModule">
-            <target>registerAccount</target>
-        </uris:turbine-uri>
-        <uris:turbine-uri id="petstoreAccountLink" exposed="true" extends="userModule">
-            <target>account</target>
-        </uris:turbine-uri>
-        <uris:uri id="toolkitArchLink" exposed="true" extends="toolkitSite">
-            <path>/arch/bigpicture.html</path>
-        </uris:uri>
+        <!--&lt;!&ndash; ================================================================ &ndash;&gt;-->
+        <!--&lt;!&ndash; Server Level： 外部server。                                      &ndash;&gt;-->
+        <!--&lt;!&ndash;                                                                  &ndash;&gt;-->
+        <!--&lt;!&ndash; 使用方法： link.getURI('path')                                   &ndash;&gt;-->
+        <!--&lt;!&ndash; ================================================================ &ndash;&gt;-->
+        <!--<uris:uri id="alibabaSite" exposed="true">-->
+            <!--<serverURI>http://china.alibaba.com/</serverURI>-->
+        <!--</uris:uri>-->
+        <!--<uris:uri id="toolkitSite" exposed="true">-->
+            <!--<serverURI>http://toolkit.alibaba-inc.com/</serverURI>-->
+        <!--</uris:uri>-->
+        <!--&lt;!&ndash; ================================================================ &ndash;&gt;-->
+        <!--&lt;!&ndash; Server Level： java server。                                     &ndash;&gt;-->
+        <!--&lt;!&ndash;                                                                  &ndash;&gt;-->
+        <!--&lt;!&ndash; 使用方法： 不能直接使用，只被其它URI继承。                       &ndash;&gt;-->
+        <!--&lt;!&ndash; ================================================================ &ndash;&gt;-->
+        <!--<uris:servlet-uri id="petstoreServer" requestAware="true">-->
+            <!--<servletPath>/</servletPath>-->
+        <!--</uris:servlet-uri>-->
+        <!--&lt;!&ndash; ================================================================ &ndash;&gt;-->
+        <!--&lt;!&ndash; Component Level： webx modules。                                 &ndash;&gt;-->
+        <!--&lt;!&ndash;                                                                  &ndash;&gt;-->
+        <!--&lt;!&ndash; 使用方法： link.setTarget('target.jhtml')                        &ndash;&gt;-->
+        <!--&lt;!&ndash;                  .addQueryData('name', 'value')                  &ndash;&gt;-->
+        <!--&lt;!&ndash; ================================================================ &ndash;&gt;-->
+        <!--&lt;!&ndash; home &ndash;&gt;-->
+        <!--<uris:turbine-uri id="homeModule" exposed="true" extends="petstoreServer">-->
+            <!--<componentPath>/</componentPath>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:turbine-content-uri id="homeContent" exposed="true" extends="homeModule">-->
+            <!--<componentPath>/home</componentPath>-->
+        <!--</uris:turbine-content-uri>-->
+        <!--&lt;!&ndash; user &ndash;&gt;-->
+        <!--<uris:turbine-uri id="userModule" exposed="true" extends="petstoreServer">-->
+            <!--<componentPath>/user</componentPath>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:turbine-content-uri id="userContent" exposed="true" extends="userModule" />-->
+        <!--&lt;!&ndash; store &ndash;&gt;-->
+        <!--<uris:turbine-uri id="storeModule" exposed="true" extends="petstoreServer">-->
+            <!--<componentPath>/store</componentPath>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:turbine-content-uri id="storeContent" exposed="true" extends="storeModule" />-->
+        <!--<uris:servlet-content-uri id="storeImageContent" exposed="true" extends="petstoreServer">-->
+            <!--<prefixPath>/petstore/images</prefixPath>-->
+        <!--</uris:servlet-content-uri>-->
+        <!--&lt;!&ndash; ================================================================ &ndash;&gt;-->
+        <!--&lt;!&ndash; Link Level： 继承前述各类links。                                 &ndash;&gt;-->
+        <!--&lt;!&ndash;                                                                  &ndash;&gt;-->
+        <!--&lt;!&ndash; 使用方法： link                                                  &ndash;&gt;-->
+        <!--&lt;!&ndash; ================================================================ &ndash;&gt;-->
+        <!--<uris:turbine-uri id="petstoreHomeLink" exposed="true" extends="homeModule">-->
+            <!--<target>homepage</target>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:turbine-uri id="petstoreLoginLink" exposed="true" extends="userModule">-->
+            <!--<target>login</target>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:turbine-uri id="petstoreLogoutLink" exposed="true" extends="userModule">-->
+            <!--<target>login</target>-->
+            <!--<query key="action">loginAction</query>-->
+            <!--<query key="eventSubmitDoLogout">yes</query>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:turbine-uri id="petstoreRegisterLink" exposed="true" extends="userModule">-->
+            <!--<target>register</target>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:turbine-uri id="petstoreRegisterAccountLink" exposed="true" extends="userModule">-->
+            <!--<target>registerAccount</target>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:turbine-uri id="petstoreAccountLink" exposed="true" extends="userModule">-->
+            <!--<target>account</target>-->
+        <!--</uris:turbine-uri>-->
+        <!--<uris:uri id="toolkitArchLink" exposed="true" extends="toolkitSite">-->
+            <!--<path>/arch/bigpicture.html</path>-->
+        <!--</uris:uri>-->
 
-        <!-- 自己定义的uris -->
-        <uris:turbine-uri id="browse" exposed="true" extends="petstoreServer">
-            <componentPath>/</componentPath>
-        </uris:turbine-uri>
+        <!--&lt;!&ndash; 自己定义的uris &ndash;&gt;-->
+        <!--<uris:turbine-uri id="browse" exposed="true" extends="petstoreServer">-->
+            <!--<componentPath>/</componentPath>-->
+        <!--</uris:turbine-uri>-->
     </services:uris>
 
 </beans:beans>

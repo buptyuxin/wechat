@@ -8,11 +8,6 @@
            http://www.springframework.org/schema/context/spring-context-2.5.xsd"
        default-autowire="byName">
 
-    <bean id = "userDAO" class = "com.yanmo.message.core.dao.UserDAO" />
-
-    <bean id="userManager" class="com.yanmo.message.core.manager.impl.UserManagerImpl" />
-
-    <bean id="userLoginDao" class="com.yanmo.message.core.dao.UserLoginDao" />
 
 
 </beans>
