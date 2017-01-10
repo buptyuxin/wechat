@@ -23,7 +23,6 @@
         <dependency>
             <groupId>com.alibaba.citrus</groupId>
             <artifactId>citrus-webx-all</artifactId>
-            <version>${webx3.version}</version>
         </dependency>
 
         <dependency>

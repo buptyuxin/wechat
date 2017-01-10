@@ -51,8 +51,8 @@
 
             <dependency>
                 <groupId>com.alibaba.citrus</groupId>
-                <artifactId>cirtus-webx-all</artifactId>
-                <version>${webx3.version}}</version>
+                <artifactId>citrus-webx-all</artifactId>
+                <version>${webx3.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>

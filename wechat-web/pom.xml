@@ -28,7 +28,6 @@
         <dependency>
             <groupId>com.alibaba.citrus</groupId>
             <artifactId>citrus-webx-all</artifactId>
-            <version>${webx3.version}</version>
         </dependency>
 
         <dependency>
@@ -66,10 +65,10 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>io.netty</groupId>-->
+            <!--<artifactId>netty-all</artifactId>-->
+        <!--</dependency>-->
 
     </dependencies>
 
