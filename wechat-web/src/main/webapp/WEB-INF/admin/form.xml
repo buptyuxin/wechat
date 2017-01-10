@@ -53,40 +53,34 @@
           - ===============================================
          -->
         <group name="register" extends="csrfTokenCheckGroup">
-            <field name="registerError">
-                <fm-validators:custom-error id="duplicatedUserId">
-                    <message>登录名“${userId}”已经被人注掉了，请尝试另一个名字</message>
+            <field name="loginError">
+                <fm-validators:custom-error id="invalidUserOrPassword">
+                    <message>用户名或密码不正确,请重新输入</message>
                 </fm-validators:custom-error>
             </field>
-            <field name="userId" displayName="登录名">
+            <field name="userNick" displayName="登录名">
                 <fm-validators:required-validator>
                     <message>必须填写 ${displayName}</message>
                 </fm-validators:required-validator>
-                <fm-validators:regexp-validator pattern="^[A-Za-z_][A-Za-z_0-9]*$">
-                    <message>${displayName} 必须由字母、数字、下划线构成</message>
-                </fm-validators:regexp-validator>
-                <fm-validators:string-length-validator minLength="4" maxLength="10">
-                    <message>${displayName} 最少必须由${minLength}个字组成，最多不能超过${maxLength}个字</message>
-                </fm-validators:string-length-validator>
             </field>
-            <field name="password" displayName="密码">
+            <field name="userPwd" displayName="密码">
                 <fm-validators:required-validator>
                     <message>必须填写 ${displayName}</message>
                 </fm-validators:required-validator>
-                <fm-validators:string-length-validator minLength="4" maxLength="10">
-                    <message>${displayName} 最少必须由${minLength}个字组成，最多不能超过${maxLength}个字</message>
-                </fm-validators:string-length-validator>
-                <fm-validators:string-compare-validator notEqualTo="userId">
-                    <message>${displayName} 不能与 ${userId.displayName} 相同</message>
-                </fm-validators:string-compare-validator>
             </field>
-            <field name="passwordConfirm" displayName="密码验证">
+        </group>
+        <!--
+          - ===============================================
+          - 输入文本表单
+          - ===============================================
+         -->
+        <group name="textInsert" extends="csrfTokenCheckGroup">
+            <field name="text" displayName="文本">
                 <fm-validators:required-validator>
                     <message>必须填写 ${displayName}</message>
                 </fm-validators:required-validator>
-                <fm-validators:string-compare-validator equalTo="password">
-                    <message>${displayName} 必须和 ${password.displayName} 相同</message>
-                </fm-validators:string-compare-validator>
+                <!--<fm-validators:string-length-validator>-->
+                <!--</fm-validators:string-length-validator>-->
             </field>
         </group>
     </services:form>

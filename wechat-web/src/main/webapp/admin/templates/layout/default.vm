@@ -1,9 +1,34 @@
 <html>
-<title>鱼子酱微信后台</title>
+<style type="text/css">
+    #all
+    {
+        ##width: 1000px;
+        vertical-align: middle;
+        padding-top: 24px;
+        padding-bottom: 24px;
+        overflow: hidden;
+    }
+    #left
+    {
+        float:left;
+    }
+    #right
+    {
+        vertical-align: middle;
+    }
+</style>
+<title>微信后台</title>
 <header>
-    <h1>欢迎来到微信后台！</h1>
+    <h1 align="center" >欢迎来到微信后台！</h1>
 </header>
 <body>
-    $screen_placeholder
+<div id="all">
+    <div id="left">
+        <img src="/weixin/images/3.jpg" height="400" width="260" />
+    </div>
+    <div id="right">
+        $screen_placeholder
+    </div>
+</div>
 </body>
 </html>

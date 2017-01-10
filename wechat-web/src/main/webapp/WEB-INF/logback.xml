@@ -51,6 +51,6 @@
     </logger>
 
     <root userLevel="DEBUG">
-        <appender-ref ref="biz" />
+        <appender-ref ref="stdout" />
     </root>
 </configuration>

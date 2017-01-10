@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" >
+
+    <xsd:element name="my-service" type="MyServiceType" />
+
+    <xsd:complexType name="MyServiceType">
+        <xsd:all>
+            <xsd:element name="wang" type="xsd:string" default="Hello World" />
+        </xsd:all>
+        <xsd:attribute name="post" type="xsd:string" default="!" />
+    </xsd:complexType>
+
+</xsd:schema>

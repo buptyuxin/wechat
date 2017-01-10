@@ -49,7 +49,7 @@
 
     <!-- beans配置。 -->
     <beans:import resource="classpath:spring-beans.xml" />
-    <beans:import resource="classpath:wechat/core/dao.xml" />
+    <!--<beans:import resource="classpath:wechat/core/dao.xml" />-->
     <!--<beans:import resource="classpath:manager.xml" />-->
 
     <!-- 综合设置。 -->
@@ -58,7 +58,7 @@
         <!--<productionMode>${productionMode:true}</productionMode>-->
         <productionMode>true</productionMode>
         <!-- 设置默认应用 -->
-        <components defaultComponent="admin" />
+        <!--<components defaultComponent="admin" />-->
     </services:webx-configuration>
 
     <!-- 设置request/response/session。 -->
@@ -73,21 +73,33 @@
         </request-contexts:parser>
         <request-contexts:set-locale defaultLocale="zh_CN" defaultCharset="UTF-8" />
         <request-contexts:session forceExpirationPeriod="14400">
-            <!-- cookie store设置 临时cookie，浏览器关闭则清除，默认设置 -->
+            <!-- 如果不设置的话默认也是下面的id设置 -->
+            <id cookieEnabled="true" urlEncodeEnabled="false">
+                <cookie name="WECHATSESSION" domain="" maxAge="14400" path="/" httpOnly="true" secure="false" />
+                <url-encode name="WECHATSESSION" />
+                <session-idgens:uuid-generator />
+            </id>
+            <!-- cookie store设置 将session存在cookie中 -->
             <stores>
                 <session-stores:cookie-store id="temporaryCookie">
-                    <cookie name="tmp" />
+                    <cookie name="tmp" maxAge="14400" />
                 </session-stores:cookie-store>
             </stores>
             <store-mappings>
                 <match name="*" store="temporaryCookie" />
             </store-mappings>
+            <session-model-encoders>
+                <model-encoders:default-session-model-encoder />
+                <!-- 可以配置别的解码器，定义session存储格式 -->
+                <!--<model-encoders:model-encoder class="..." />-->
+            </session-model-encoders>
             <interceptors>
                 <session-interceptors:lifecycle-logger />
                 <!-- 拦截器只允许白名单的attribute名称和类型被写入或读出到session store -->
                 <session-interceptors:attribute-whitelist>
                     <attribute name="_csrf_token" />
                     <attribute name="_lang" />
+                    <attribute name="nick" />
                     <!--<attribute name="user" type="com.yanmo.message.web.common.User" />-->
                 </session-interceptors:attribute-whitelist>
             </interceptors>

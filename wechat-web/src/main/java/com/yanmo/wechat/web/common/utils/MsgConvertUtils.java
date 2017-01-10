@@ -90,7 +90,7 @@ public class MsgConvertUtils {
     private static boolean parseMsgCommonProps(MsgDO msgDO, Element element) throws InvocationTargetException, IllegalAccessException {
         for (String propName : MSG_COMMON_PROPERTIES) {
             if (propName.equalsIgnoreCase(element.getName())) {
-                // 通过反射把属性注入到消息对象中
+                // 通过反射把公共属性注入到消息对象中
                 for (Method method : msgDO.getClass().getDeclaredMethods()) {
                     if (method.getName().equalsIgnoreCase(METHOD_SET_PREFIX + propName)) {
                         method.invoke(msgDO, element.getText());

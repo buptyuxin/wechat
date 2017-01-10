@@ -1,0 +1,21 @@
+##action为提交的页面地址，为空表示提交到当前页面
+#macro (registerMessage $field)
+    #if (!$field.valid) $field.message #end
+#end
+#set ($group = $form.register.defaultInstance)
+
+<p id="error" bgcolor="red" align="center" >$!error</p>
+<form name="registerForm" action="" method="post">
+    $!csrfToken.hiddenField
+    <input type="hidden" name="action" value="/user/register_action" />
+    <input type="hidden" name="event_submit_do_register" value="true" />
+    <p align="center">请填写新用户信息</p>
+    用户名<input type="text" name="$group.userNick.key" value="$group.userNick.value" />
+    #registerMessage ($group.userNick)
+    <br />
+    密码  <input type="password" name="$group.userPwd.key" value="$group.userPwd.value" />
+    #registerMessage ($group.userPwd)
+    <br />
+    <input type="submit" name="submit" value="注册" />
+
+</form>

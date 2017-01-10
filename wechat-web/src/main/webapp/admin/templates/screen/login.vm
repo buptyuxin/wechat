@@ -1,12 +1,21 @@
 ##action为提交的页面地址，为空表示提交到当前页面
-
+#macro (registerMessage $field)
+    #if (!$field.valid) $field.message #end
+#end
 #set ($group = $form.login.defaultInstance)
 
-<form name="loginForm" action="" method="post" enctype="text/plain">
-    #!csrfToken.hiddenField
-    <input type="hidden" name="action" value="login_action" />
-    <input type="hidden" name="event_submit_do_login" />
-    用户名<input type="text" name="UserNick" />
-    密码  <input type="password" name="UserPwd" />
-    登录  <input type="submit" name="submit" />
+<form name="loginForm" action="" method="post">
+$!csrfToken.hiddenField
+    <input type="hidden" name="action" value="/login_action" />
+    <input type="hidden" name="event_submit_do_login" value="true" />
+    用户名<input type="text" name="$group.userNick.key" value="$group.userNick.value" />
+    #registerMessage ($group.userNick)
+    <br />
+    密码  <input type="password" name="$group.userPwd.key" value="$group.userPwd.value" />
+    #registerMessage ($group.userPwd)
+    $!error
+    <br />
+    <input type="submit" name="submit" value="登录" />
+    <a href="${adminModule}/user/register.vm">点我注册</a>
+
 </form>

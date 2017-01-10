@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yanmo.wechat.admin.dao.TextMapper">
+
+       <insert id="insert" parameterType="com.yanmo.wechat.domain.admin.TextDO">    <!-- 向数据库中插入文本 -->
+              insert into text(id,text,gmt_create,gmt_modified,user_id) values(#{id},#{text},now(),now(),#{userId})
+       </insert>
+
+       <delete id="delete" parameterType="long">    <!-- 删除文本 -->
+              delete from text where id=#{id}
+       </delete>
+
+       <select id="getTextById" parameterType="long" resultType="com.yanmo.wechat.domain.admin.TextDO"> <!-- 根据id查找文本 -->
+              select * from text where id=#{id}
+       </select>
+
+</mapper>

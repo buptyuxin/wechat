@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+       <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+              <encoder charset="GBK">
+                     <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%thread]%-5level %logger{36} - %msg%n</pattern>
+              </encoder>
+       </appender>
+
+       <!-- 这种日志类型会根据触发条件，比如，定时（每天一个新文件）、定量（日志文件到达20m后换新文件）更换日志文件 -->
+       <appender name="test" class="ch.qos.logback.core.rolling.RollingFileAppender">
+              <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                     <fileNamePattern>D:/logs/test.log.%d{yyyy-MM-dd}</fileNamePattern>
+                     <!-- 最多保存一天的日志 -->
+                     <maxHistory>3</maxHistory>
+              </rollingPolicy>
+              <file>D:/logs/test.log</file>
+              <!--
+              <appender>true</appender>
+               -->
+              <encoder>
+                     <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%thread]%-5level %logger{36} - %msg%n</pattern>
+              </encoder>
+       </appender>
+
+       <logger name="test" userLevel="INFO">
+              <appender-ref ref="test" />
+       </logger>
+
+       <root userLevel="DEBUG">
+              <appender-ref ref="test" />
+       </root>
+</configuration>

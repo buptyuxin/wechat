@@ -3,7 +3,7 @@ package com.yanmo.wechat.domain.error;
 /**
  * Created by yanmo.yx on 2015/4/18.
  */
-public enum Error {
+public enum Errors {
     ACCESS_TOKEN_ERROR("ACCESS_TOKEN_ERROR", "access token错误"),
 
     PARSE_JSON_ERROR("PARSE_JSON_ERROR", "解析json失败"),
@@ -12,7 +12,7 @@ public enum Error {
     private String code;
     private String name;
 
-    Error(String code, String name) {
+    Errors(String code, String name) {
         this.code = code;
         this.name = name;
     }
@@ -34,7 +34,7 @@ public enum Error {
     }
 
     public static String getNameByCode(String code) {
-        for (Error error : Error.values()) {
+        for (Errors error : Errors.values()) {
             if (error.getCode().equals(code)) {
                 return error.getName();
             }

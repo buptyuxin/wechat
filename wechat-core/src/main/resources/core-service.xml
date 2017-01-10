@@ -2,10 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:fff="http://com.yanmo.net/schema/people"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
            http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://com.yanmo.net/schema/people http://com.yanmo.net/schema/people.xsd"
        default-autowire="byName">
 
     <bean id="msgProcessService" class="com.yanmo.wechat.biz.service.impl.MsgProcessServiceImpl">
@@ -36,5 +38,43 @@
             </list>
         </property>
     </bean>
+
+    <import resource="classpath:wechat/core/mybatis.xml" />
+
+    <!--DAO-->
+
+    <bean id="userDAO" class="com.yanmo.wechat.admin.dao.impl.UserDAOImpl" />
+
+    <bean id="recordDAO" class="com.yanmo.wechat.admin.dao.impl.RecordDAOImpl" />
+
+    <bean id="textDAO" class="com.yanmo.wechat.admin.dao.impl.TextDAOImpl" />
+
+    <bean id="sequenceDAO" class="com.yanmo.wechat.admin.dao.impl.SequenceDAOImpl" />
+
+
+    <!--Module-->
+
+    <bean id="userReadModule" class="com.yanmo.wechat.admin.module.impl.UserReadModuleImpl" />
+
+    <bean id="userWriteModule" class="com.yanmo.wechat.admin.module.impl.UserWriteModuleImpl" />
+
+    <bean id="textReadModule" class="com.yanmo.wechat.admin.module.impl.TextReadModuleImpl" />
+
+    <bean id="textWriteModule" class="com.yanmo.wechat.admin.module.impl.TextWriteModuleImpl" />
+
+    <bean id="recordReadModule" class="com.yanmo.wechat.admin.module.impl.RecordReadModuleImpl" />
+
+    <bean id="recordWriteModule" class="com.yanmo.wechat.admin.module.impl.RecordWriteModuleImpl" />
+
+
+    <!--Other-->
+
+    <bean id="tokenService" class="com.yanmo.wechat.biz.service.impl.TokenServiceImpl" />
+
+    <bean id="httpClientModule" class="com.yanmo.wechat.biz.module.impl.HttpClientModuleImpl" init-method="init" />
+
+    <bean id="jsonParser" class="com.yanmo.wechat.biz.msg.parser.JsonParser" />
+
+    <fff:dog name="das" age="12" id="dog" />
 
 </beans>

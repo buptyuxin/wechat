@@ -14,59 +14,79 @@
 
     <services:pipeline>
 
-        <!-- 初始化turbine rundata，并在pipelineContext中设置可能会用到的对象(如rundata、utils)，以便valve取得。 -->
-        <pl-valves:prepareForTurbine />
+        <pl-valves:try-catch-finally>
 
-        <!-- 设置日志系统的上下文，支持把当前请求的详情打印在日志中。 -->
-        <pl-valves:setLoggingContext />
+            <try>
 
-        <!-- 分析URL，取得target。 -->
-        <pl-valves:analyzeURL homepage="default" />
+                <!-- 初始化turbine rundata，并在pipelineContext中设置可能会用到的对象(如rundata、utils)，以便valve取得。 -->
+                <pl-valves:prepareForTurbine />
 
-        <!-- 检查csrf token，防止csrf攻击和重复提交。假如request和session中的token不匹配，则出错，或显示expired页面。 -->
-        <pl-valves:checkCsrfToken />
+                <!-- 设置日志系统的上下文，支持把当前请求的详情打印在日志中。 -->
+                <pl-valves:setLoggingContext />
 
-        <!-- 测试valve -->
-        <!--<pl-valves:class="com.yanmo.message.web.common.MyValve" />-->
+                <!-- 分析URL，取得target。 -->
+                <pl-valves:analyzeURL homepage="default" />
 
-        <!-- 检查页面的授权，如果当前用户无权访问该页面，则跳转到petstoreLogin页面 -->
-        <!--<pl-valves:pageAuthorization callbackClass="com.alibaba.sample.petstore.web.common.PetstoreUserAuth" />-->
+                <!-- 检查csrf token，防止csrf攻击和重复提交。假如request和session中的token不匹配，则出错，或显示expired页面。 -->
+                <pl-valves:checkCsrfToken />
 
-        <pl-valves:loop>
-            <pl-valves:choose>
-                <when>
-                    <!-- 执行带模板的screen，默认有layout。 -->
-                    <pl-conditions:target-extension-condition extension="null,vm" />
-                    <pl-valves:performAction />
-                    <pl-valves:performTemplateScreen />
-                    <pl-valves:renderTemplate />
-                </when>
-                <when>
-                    <!-- 执行不带模板的screen，无layout。 -->
-                    <pl-conditions:target-extension-condition extension="do" />
-                    <pl-valves:performAction />
-                    <pl-valves:performScreen />
-                </when>
-                <when>
-                    <!-- 创建JSON，无模板，无layout。 -->
-                    <pl-conditions:target-extension-condition extension="json" />
-                    <pl-valves:performScreen />
-                    <pl-valves:renderResultAsJson />
-                </when>
-                <when>
-                    <!-- 读取资源文件。 -->
-                    <pl-conditions:path-condition name="/petstore/images/(.+)" />
-                    <pl-valves:getResource name="/petstore/images/$1" />
-                </when>
-                <otherwise>
-                    <!-- 将控制交还给servlet engine。 -->
-                    <pl-valves:exit />
-                </otherwise>
-            </pl-valves:choose>
+                <!-- 这样终于不用总是要autowired注解来注入request和response了 -->
+                <pl-valves:valve class="com.yanmo.wechat.web.common.pipeline.MyValve" autowire="byType"/>
 
-            <!-- 假如rundata.setRedirectTarget()被设置，则循环，否则退出循环。 -->
-            <pl-valves:breakUnlessTargetRedirected />
-        </pl-valves:loop>
+                <!-- 测试valve -->
+                <!--<pl-valves:class="com.yanmo.message.web.common.MyValve" />-->
+
+                <!-- 检查页面的授权，如果当前用户无权访问该页面，则跳转到petstoreLogin页面 -->
+                <!--<pl-valves:pageAuthorization callbackClass="com.alibaba.sample.petstore.web.common.PetstoreUserAuth" />-->
+
+                <pl-valves:loop>
+                    <pl-valves:choose>
+                        <when>
+                            <!-- 执行带模板的screen，默认有layout。 -->
+                            <pl-conditions:target-extension-condition extension="null,htm,vm" />
+                            <pl-valves:performAction />
+                            <pl-valves:performTemplateScreen />
+                            <pl-valves:renderTemplate />
+                        </when>
+                        <when>
+                            <!-- 执行不带模板的screen，无layout。 -->
+                            <pl-conditions:target-extension-condition extension="do" />
+                            <pl-valves:performAction />
+                            <pl-valves:performScreen />
+                        </when>
+                        <when>
+                            <!-- 创建JSON，无模板，无layout。 -->
+                            <pl-conditions:target-extension-condition extension="json" />
+                            <pl-valves:performScreen />
+                            <pl-valves:renderResultAsJson />
+                        </when>
+                        <when>
+                            <!-- 读取资源文件。 -->
+                            <pl-conditions:path-condition name="/petstore/images/(.+)" />
+                            <pl-valves:getResource name="/petstore/images/$1" />
+                        </when>
+                        <otherwise>
+                            <!-- 将控制交还给servlet engine。 -->
+                            <pl-valves:exit />
+                        </otherwise>
+                    </pl-valves:choose>
+
+                    <!-- 假如rundata.setRedirectTarget()被设置，则循环，否则退出循环。 -->
+                    <pl-valves:breakUnlessTargetRedirected />
+                </pl-valves:loop>
+
+            </try>
+
+            <catch>
+                <!-- 这里是处理一些unchecked exception -->
+            </catch>
+
+            <finally>
+                <!-- 负责清理工作 -->
+                <pl-valves:valve class="com.yanmo.wechat.web.common.pipeline.CleanValve" autowire="byType" />
+            </finally>
+
+        </pl-valves:try-catch-finally>
 
     </services:pipeline>
 

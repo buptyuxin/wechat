@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+       default-autowire="byName">
+
+    <!-- 导入属性配置文件，location可以配成绝对路径，暂时配成classpath -->
+    <context:property-placeholder location="classpath:mysql.properties" />
+    <!-- 配合上面的标签使用，主要是多子项目工程中，多个子项目定义PropertyPlaceholderConfigurer中只有一个能初始化，这样就会
+            在两个模块集成运行时，只有一个配置被导入，因为spring生成一个property bean之后就不会再生成别的property bean了
+    <import resource="xx1.xml"/>
+    <import resource="xx2.xml"/>
+     -->
+
+    <!-- 与上述标签作用相同，上述标签就是通过该对象完成属性替换
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location">
+            <value>mysql.properties</value>
+        </property>
+    </bean>
+     -->
+
+    <!-- 分库分表后续配置，使用c3p0数据库连接池 -->
+    <bean id="dataSourceUser_01" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.user.url}" />
+        <property name="user" value="${jdbc.usrName}"></property>
+        <property name="password" value="${jdbc.usrPwd}"></property>
+        <!--
+        <property name="maxActive" value="${jdbc.maxActive}"></property>
+        <property name="maxIdle" value="${jdbc.maxIdle}"></property>
+        <property name="maxWait" value="${jdbc.maxWait}"></property>
+        <property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"></property>
+         -->
+    </bean>
+
+    <bean id="dataSourceUser_02" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.user.url}" />
+        <property name="user" value="${jdbc.usrName}"></property>
+        <property name="password" value="${jdbc.usrPwd}"></property>
+        <!--
+        <property name="maxActive" value="${jdbc.maxActive}"></property>
+        <property name="maxIdle" value="${jdbc.maxIdle}"></property>
+        <property name="maxWait" value="${jdbc.maxWait}"></property>
+        <property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"></property>
+         -->
+    </bean>
+
+    <!--
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSourceUser_01" />
+    </bean>
+     -->
+
+    <!--当时做分库用的-->
+    <!--
+    <bean id="sqlSessionFactoryUser_01" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="mapperLocations" value="classpath:sql/*.xml" />
+        <property name="dataSource" ref="dataSourceUser_01" />
+    </bean>
+
+    <bean id="sqlSessionFactoryUser_02" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="mapperLocations" value="classpath:sql/*.xml" />
+        <property name="dataSource" ref="dataSourceUser_02" />
+    </bean>
+
+    <bean id="sqlSessionUser_01" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactoryUser_01" />
+    </bean>
+
+    <bean id="sqlSessionUser_02" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactoryUser_02" />
+    </bean>
+
+    <bean id="SqlSessionManager" class="com.yanmo.message.core.manager.impl.SqlSessionManagerImpl">
+        <property name="dbMap">
+            <map>
+                <entry key="USER_1" value-ref="sqlSessionUser_01"/>
+                <entry key="USER_2" value-ref="sqlSessionUser_02"/>
+            </map>
+        </property>
+    </bean>
+-->
+
+
+    <!-- 用户登录使用，暂不做分库
+     数据库单表性能500W查询性能显著下降，因此做分表
+     同时，考虑到单库的负载，做分库
+     -->
+    <bean id="dataSourceUser" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.user.url}" />
+        <property name="user" value="${jdbc.usrName}"></property>
+        <property name="password" value="${jdbc.usrPwd}"></property>
+        <!--
+        <property name="maxActive" value="${jdbc.maxActive}"></property>
+        <property name="maxIdle" value="${jdbc.maxIdle}"></property>
+        <property name="maxWait" value="${jdbc.maxWait}"></property>
+        <property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}"></property>
+         -->
+    </bean>
+
+    <bean id="sqlSessionFactoryUser" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--可以使用通配符-->
+        <!--<property name="mapperLocations" value="classpath:wechat/core/sql/*.xml" />-->
+        <property name="mapperLocations" value="classpath:wechat/core/sql/user_mapping.xml" />
+        <property name="dataSource" ref="dataSourceUser" />
+    </bean>
+
+    <!--这个类的实例是线程安全的，单纯使用SqlSession是非线程安全的，这里由mybatis-spring对sqlSession进行了封装-->
+    <bean id="sqlSessionUser" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactoryUser" />
+    </bean>
+
+    <!--这里可以直接使用spring事务对用户库进行事务操作-->
+    <bean id="userTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager">
+            <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+                <property name="dataSource">
+                    <ref bean="dataSourceUser" />
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 这里搞个sequence序列，用来产生user_id等，使用事务 -->
+    <bean id="dataSourceSequence" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.sequence.url}" />
+        <property name="user" value="${jdbc.usrName}"></property>
+        <property name="password" value="${jdbc.usrPwd}"></property>
+    </bean>
+
+    <bean id="sqlSessionFactorySequence" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--可以使用通配符-->
+        <!--<property name="mapperLocations" value="classpath:wechat/core/sql/*.xml" />-->
+        <property name="mapperLocations" value="classpath:wechat/core/sql/sequence_mapping.xml" />
+        <property name="dataSource" ref="dataSourceSequence" />
+    </bean>
+
+    <bean id="sqlSessionSequence" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactorySequence" />
+    </bean>
+
+    <bean id="sequenceTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager">
+            <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+                <property name="dataSource">
+                    <ref bean="dataSourceSequence" />
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- mapper beans
+    <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.ali.yanmo.mappers.UserMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    <bean id="messageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="com.ali.yanmo.mappers.MessageMapper" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    -->
+
+    <!--需要一个record表，记录user发布text-->
+
+    <!--分布式事务管理-->
+    <!--atomikos数据连接池-->
+    <bean id="atomikosDataSourceRecord" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close" >
+        <property name="uniqueResourceName" value="mysql/record" />
+        <property name="xaDataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource" />
+        <property name="xaProperties">
+            <props>
+                <prop key="url">jdbc:mysql://localhost:3306/record?characterEncoding=utf8&amp;allowMultiQueries=true</prop>
+                <prop key="user">root</prop>
+                <prop key="password">root</prop>
+            </props>
+        </property>
+        <property name="maxPoolSize" value="50" />
+        <property name="minPoolSize" value="10" />
+        <property name="borrowConnectionTimeout" value="30" />
+        <property name="maintenanceInterval" value="60" />
+    </bean>
+
+    <bean id="atomikosDataSourceText" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close" >
+        <property name="uniqueResourceName" value="mysql/text" />
+        <property name="xaDataSourceClassName" value="com.mysql.jdbc.jdbc2.optional.MysqlXADataSource" />
+        <property name="xaProperties">
+            <props>
+                <prop key="url">jdbc:mysql://localhost:3306/text?characterEncoding=utf8&amp;allowMultiQueries=true</prop>
+                <prop key="user">root</prop>
+                <prop key="password">root</prop>
+            </props>
+        </property>
+        <property name="maxPoolSize" value="50" />
+        <property name="minPoolSize" value="10" />
+        <property name="borrowConnectionTimeout" value="30" />
+        <property name="maintenanceInterval" value="60" />
+    </bean>
+
+    <bean id="sqlSessionFactoryAtomRecord" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--可以使用通配符-->
+        <!--<property name="mapperLocations" value="classpath:wechat/core/sql/*.xml" />-->
+        <property name="mapperLocations" value="classpath:wechat/core/sql/record_mapping.xml" />
+        <property name="dataSource" ref="atomikosDataSourceRecord" />
+    </bean>
+
+    <bean id="sqlSessionRecord" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactoryAtomRecord" />
+    </bean>
+
+    <bean id="sqlSessionFactoryAtomText" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--可以使用通配符-->
+        <!--<property name="mapperLocations" value="classpath:wechat/core/sql/*.xml" />-->
+        <property name="mapperLocations" value="classpath:wechat/core/sql/text_mapping.xml" />
+        <property name="dataSource" ref="atomikosDataSourceText" />
+    </bean>
+
+    <bean id="sqlSessionText" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactoryAtomText" />
+    </bean>
+
+    <!--配置分布式事务管理-->
+    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init" destroy-method="close" >
+        <property name="forceShutdown" value="true" />
+    </bean>
+
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp">
+        <property name="transactionTimeout" value="300" />
+    </bean>
+
+    <bean id="distributedTransactionManager" class="org.springframework.transaction.jta.JtaTransactionManager" >
+        <property name="transactionManager" ref="atomikosTransactionManager" />
+        <property name="userTransaction" ref="atomikosUserTransaction" />
+    </bean>
+
+    <bean id="distributedTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" >
+        <property name="transactionManager" ref="distributedTransactionManager" />
+    </bean>
+
+</beans>

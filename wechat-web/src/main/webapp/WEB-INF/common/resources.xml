@@ -14,7 +14,7 @@
 
     <services:resource-loading>
 
-        <!--<resource-alias pattern="/" name="/webroot" />-->
+        <resource-alias pattern="/" name="/webroot" />
 
         <!--&lt;!&ndash; 子模块模板目录：/*/templates &ndash;&gt;-->
         <!--&lt;!&ndash; 全局模板目录：  /*/templates/global &ndash;&gt;-->
@@ -31,19 +31,20 @@
             <!--<res-loaders:file-loader basedir="$petstore_upload" />-->
         <!--</resource>-->
 
-        <!--&lt;!&ndash; 图片显示目录：/petstore/images，先在upload目录中找，然后在应用里找 &ndash;&gt;-->
-        <!--<resource pattern="/petstore/images">-->
-            <!--<res-loaders:file-loader basedir="$petstore_upload" />-->
-            <!--<res-loaders:super-loader name="/webroot/store/images" />-->
-        <!--</resource>-->
+        <!-- 图片显示目录：/petstore/images，先在upload目录中找，然后在应用里找 -->
+        <resource pattern="/images">
+            <res-loaders:file-loader basedir="$images" />
+            <res-loaders:super-loader name="/webroot/store/images" />
+        </resource>
 
-        <!--&lt;!&ndash; 内部资源 &ndash;&gt;-->
-        <!--<resource pattern="/webroot" internal="true">-->
-            <!--<res-loaders:webapp-loader />-->
-        <!--</resource>-->
-        <!--<resource pattern="/classpath" internal="true">-->
-            <!--<res-loaders:classpath-loader />-->
-        <!--</resource>-->
+        <!-- 内部资源 -->
+        <resource pattern="/webroot" internal="true">
+            <res-loaders:webapp-loader />
+        </resource>
+
+        <resource pattern="/classpath" internal="true">
+            <res-loaders:classpath-loader />
+        </resource>
 
     </services:resource-loading>
 

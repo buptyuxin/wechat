@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yanmo.wechat.admin.dao.SequenceMapper">
+
+       <!--sequence库目前设计是单库，单表（id表），多记录（每种类型的id一条记录），两列（id_type，id_num）-->
+
+       <update id="update" parameterType="com.yanmo.wechat.admin.dao.AdjustDO">     <!-- 调整用户id序列 -->
+              update id set id_num=#{id} where id_type=#{type}
+       </update>
+
+       <select id="select" parameterType="String" resultType="Long">
+              select id_num from id where id_type=#{type}
+       </select>
+
+</mapper>
